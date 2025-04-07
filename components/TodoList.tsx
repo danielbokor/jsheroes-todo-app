@@ -1,15 +1,12 @@
-type Todo = {
-  id: string;
-  title: string;
-  completed: boolean;
-};
+import { Todo } from "../types";
+import { TodoItem } from "./TodoItem";
 
 async function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function fetchTodos(): Promise<Todo[]> {
-  await delay(3000);
+  await delay(1000);
 
   const response = await fetch(
     "https://67a79752203008941f68094b.mockapi.io/todos",
@@ -30,15 +27,7 @@ export async function TodoList() {
   return (
     <ul>
       {todos.map((todo) => (
-        <li key={todo.id} className="flex items-center gap-2 p-2">
-          <input
-            type="checkbox"
-            id={todo.id}
-            checked={todo.completed}
-            readOnly
-          />
-          {todo.title}
-        </li>
+        <TodoItem key={todo.id} todo={todo} />
       ))}
     </ul>
   );
