@@ -2,10 +2,15 @@
 
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { addTodo } from "../actions";
+import { AddTodoState } from "../actions";
 
-export function AddNewTodo() {
-  const [state, formAction] = useActionState(addTodo, {});
+export function AddNewTodo({
+  onAddTodo,
+}: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onAddTodo: (_: any, data: FormData) => Promise<AddTodoState>;
+}) {
+  const [state, formAction] = useActionState(onAddTodo, {});
 
   return (
     <form className="flex flex-col gap-2 mb-4" action={formAction}>

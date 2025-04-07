@@ -1,5 +1,6 @@
+import { use } from "react";
 import { Todo } from "../types";
-import { TodoItem } from "./TodoItem";
+import { OptimisticTodoList } from "./OptimisticTodoList";
 
 async function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -21,16 +22,18 @@ async function fetchTodos(): Promise<Todo[]> {
   return response.json();
 }
 
-export async function TodoList() {
-  const todos = await fetchTodos();
+export function TodoList() {
+  const todos = use(fetchTodos());
 
-  return (
-    <ul>
-      {todos.map((todo) => (
-        <TodoItem key={todo.id} todo={todo} />
-      ))}
-    </ul>
-  );
+  // return (
+  //   <ul>
+  //     {todos.map((todo) => (
+  //       <TodoItem key={todo.id} todo={todo} />
+  //     ))}
+  //   </ul>
+  // );
+
+  return <OptimisticTodoList initialTodos={todos} />;
 }
 
 export function TodoListSkeleton() {

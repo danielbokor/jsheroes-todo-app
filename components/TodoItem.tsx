@@ -2,16 +2,21 @@
 
 import { Todo } from "@/types";
 import { useId, useTransition } from "react";
-import { toggleTodo } from "../actions";
 
-export function TodoItem({ todo }: { todo: Todo }) {
+export function TodoItem({
+  todo,
+  onToggle,
+}: {
+  todo: Todo;
+  onToggle: (todo: Todo) => Promise<void>;
+}) {
   const htmlId = useId();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isPending, startTransition] = useTransition();
 
   const handleToggle = () => {
     startTransition(async () => {
-      await toggleTodo(todo);
+      await onToggle(todo);
     });
   };
 

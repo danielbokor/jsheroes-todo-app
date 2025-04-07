@@ -3,6 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { Todo } from "./types";
 
+async function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export async function toggleTodo(todo: Todo) {
   const response = await fetch(
     `https://67a79752203008941f68094b.mockapi.io/todos/${todo.id}`,
@@ -42,6 +46,8 @@ export async function addTodo(
   }
 
   if (title.length < 5) {
+    await delay(2000);
+
     return {
       ...prevState,
       error: {
