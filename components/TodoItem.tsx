@@ -24,7 +24,10 @@ export function TodoItem({ todo }: { todo: Todo }) {
         onChange={handleToggle}
         className="cursor-pointer"
       />
-      <label htmlFor={htmlId} className="cursor-pointer">
+      <label
+        htmlFor={htmlId}
+        className={`cursor-pointer ${todo.completed ? "line-through" : ""}`}
+      >
         {todo.title}
       </label>
     </li>
