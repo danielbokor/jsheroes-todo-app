@@ -1,8 +1,13 @@
+"use client";
+
+import { useActionState } from "react";
 import { addTodo } from "../actions";
 
 export function AddNewTodo() {
+  const [state, formAction] = useActionState(addTodo, {});
+
   return (
-    <form className="flex flex-col gap-2 mb-4" action={addTodo}>
+    <form className="flex flex-col gap-2 mb-4" action={formAction}>
       <div className="space-y-2">
         <label htmlFor="title" className="block text-sm font-medium">
           Title <span className="text-red-500">*</span>
@@ -12,8 +17,14 @@ export function AddNewTodo() {
           id="title"
           name="title"
           placeholder="Add new Todo"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          defaultValue={state?.title}
+          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${
+            state?.error?.title ? "border-red-500" : "border-gray-300"
+          }`}
         />
+        {state?.error?.title && (
+          <p className="text-red-500">{state.error.title}</p>
+        )}
       </div>
       <button
         type="submit"

@@ -23,25 +23,44 @@ export async function toggleTodo(todo: Todo) {
   return response.json();
 }
 
-export async function addTodo(data: FormData) {
+export type AddTodoState = {
+  error?: { title?: string };
+  title?: string;
+};
+
+export async function addTodo(
+  prevState: AddTodoState,
+  data: FormData
+): Promise<AddTodoState> {
   const title = data.get("title") as string;
 
   if (!title) {
-    throw new Error("Title is required");
+    return {
+      ...prevState,
+      error: { ...prevState.error, title: "Title is required" },
+    };
   }
 
-  const response = await fetch(
-    "https://67a79752203008941f68094b.mockapi.io/todos",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+  if (title.length < 5) {
+    return {
+      ...prevState,
+      error: {
+        ...prevState.error,
+        title: "Title must be at least 5 characters",
       },
-      body: JSON.stringify({ title, completed: false }),
-    }
-  );
+      title,
+    };
+  }
+
+  await fetch("https://67a79752203008941f68094b.mockapi.io/todos", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ title, completed: false }),
+  });
 
   revalidatePath("/");
 
-  return response.json();
+  return {};
 }
